@@ -13,6 +13,7 @@ let start_node_col = 15;
 let end_node_row = 10;
 let end_node_col = 35;
 const nodeRef = [];
+
 export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
@@ -21,7 +22,8 @@ export default class PathfindingVisualizer extends Component {
       isMousePressed: false,
       isAnimationRunning: false,
       insertingWalls: true,
-      insertingWeights: false
+      insertingWeights: false,
+      selectedAlgorithm: "dijkstra"
     };
   }
 
@@ -29,6 +31,61 @@ export default class PathfindingVisualizer extends Component {
     const grid = getInitialGrid();
     this.setState({ grid });
   }
+
+  buttonText = "Dijkstra";
+  visualizeAlgorithm = () => {
+    this.setState({ ...this.state, isAnimationRunning: true });
+    const { grid } = this.state;
+    const startNode = grid[start_node_row][start_node_col];
+    const endNode = grid[end_node_row][end_node_col];
+    let visitedNodesInOrder = [];
+    switch (this.state.selectedAlgorithm) {
+      case "dijsktra":
+        visitedNodesInOrder = dijkstra(grid, startNode, endNode);
+        this.buttonText = "Dijsktra";
+        break;
+      case "aStar":
+        visitedNodesInOrder = Astar(grid, startNode, endNode);
+        this.buttonText = "A*";
+        break;
+      case "DFS":
+        visitedNodesInOrder = DFS(grid, startNode, endNode);
+        this.buttonText = "DFS";
+        break;
+      case "BFS":
+        visitedNodesInOrder = BFS(grid, startNode, endNode);
+        this.buttonText = "BFS";
+        break;
+      default:
+        visitedNodesInOrder = dijkstra(grid, startNode, endNode);
+        this.buttonText = "Dijsktra";
+        break;
+    }
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
+    this.animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
+
+  handleChange = e => {
+    let { value } = e.target;
+    this.setState({ selectedAlgorithm: value });
+    switch (value) {
+      case "dijsktra":
+        this.buttonText = "dijsktra";
+        break;
+      case "aStar":
+        this.buttonText = "A*";
+        break;
+      case "DFS":
+        this.buttonText = "DFS";
+        break;
+      case "BFS":
+        this.buttonText = "BFS";
+        break;
+      default:
+        this.buttonText = "dijsktra";
+        break;
+    }
+  };
 
   handleMouseDown(row, col) {
     if (this.state.isAnimationRunning) return;
@@ -91,7 +148,7 @@ export default class PathfindingVisualizer extends Component {
     }
   };
 
-  animateDijkstra = (visitedNodesInOrder, NodesInshortestPathOrder) => {
+  animateAlgorithm = (visitedNodesInOrder, NodesInshortestPathOrder) => {
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length - 1) {
         setTimeout(() => {
@@ -128,16 +185,6 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  visualizeDijkstra = () => {
-    this.setState({ ...this.state, isAnimationRunning: true });
-    const { grid } = this.state;
-    const startNode = grid[start_node_row][start_node_col];
-    const endNode = grid[end_node_row][end_node_col];
-    const visitedNodesInOrder = dijkstra(grid, startNode, endNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  };
-
   createref = (row, col) => {
     return (nodeRef[row][col] = React.createRef());
   };
@@ -146,70 +193,93 @@ export default class PathfindingVisualizer extends Component {
     console.log(this.refs[`${row}-${col}`].props.isStart);
   };
 
-  visualizeAStar = () => {
-    this.setState({ ...this.state, isAnimationRunning: true });
-    const { grid } = this.state;
-    const startNode = grid[start_node_row][start_node_col];
-    const endNode = grid[end_node_row][end_node_col];
-    const visitedNodesInOrder = Astar(grid, startNode, endNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  };
-
-  visualizeBFS = () => {
-    this.setState({ ...this.state, isAnimationRunning: true });
-    const { grid } = this.state;
-    const startNode = grid[start_node_row][start_node_col];
-    const endNode = grid[end_node_row][end_node_col];
-    const visitedNodesInOrder = BFS(grid, startNode, endNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  };
-
-  visualizeDFS = () => {
-    this.setState({ ...this.state, isAnimationRunning: true });
-    const { grid } = this.state;
-    const startNode = grid[start_node_row][start_node_col];
-    const endNode = grid[end_node_row][end_node_col];
-    const visitedNodesInOrder = DFS(grid, startNode, endNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  };
-
   render() {
     const { grid, isMousePressed } = this.state;
 
     return (
       <div>
         <div className="grid">
-          <button onClick={() => this.visualizeDijkstra()}>
-            Visualize Dijkstra's algorithm{" "}
-          </button>
-          <button
-            onClick={() =>
-              this.setState({
-                insertingWalls: true,
-                insertingWeights: false,
-                changingStart: false
-              })
-            }
-          >
-            Insert Walls
-          </button>
-          <button
-            onClick={() =>
-              this.setState({
-                insertingWalls: false,
-                insertingWeights: true,
-                changingStart: false
-              })
-            }
-          >
-            Insert weights
-          </button>
-          <button onClick={() => this.visualizeAStar()}>Visualize Astar</button>
-          <button onClick={() => this.visualizeBFS()}>Visualize BFS</button>
-          <button onClick={() => this.visualizeDFS()}>Visualize DFS</button>
+          <div className="header">
+            <select onChange={this.handleChange}>
+              <option value="dijsktra">Dijkstra's algorithm (Weighted)</option>
+              <option value="aStar">A* algorithm (Weighted)</option>
+              <option value="DFS">DFS (Unweighted)</option>
+              <option value="BFS">BFS (Unweighted)</option>
+            </select>
+            <button
+              disabled={this.state.isAnimationRunning}
+              onClick={() => this.visualizeAlgorithm()}
+            >
+              Visualize {this.buttonText}
+            </button>
+            <button
+              disabled={this.state.isAnimationRunning}
+              onClick={() =>
+                this.setState({
+                  insertingWalls: true,
+                  insertingWeights: false,
+                  changingStart: false
+                })
+              }
+            >
+              Insert Walls
+            </button>
+            <button
+              disabled={this.state.isAnimationRunning}
+              onClick={() =>
+                this.setState({
+                  insertingWalls: false,
+                  insertingWeights: true,
+                  changingStart: false
+                })
+              }
+            >
+              Insert weights
+            </button>
+
+            <form className="Form">
+              <div>
+                <label htmlFor="startRow">Start row:</label>
+                <input
+                  id="startRow"
+                  type="number"
+                  name="startRow"
+                  placeholder={start_node_row}
+                />
+              </div>
+              <div>
+                <label htmlFor="startCol">Start col:</label>
+                <input
+                  id="startCol"
+                  type="number"
+                  name="startCol"
+                  placeholder={start_node_col}
+                />
+              </div>
+              <button className="small-button">Change Start</button>
+            </form>
+            <form className="Form">
+              <div>
+                <label htmlFor="endRow">End row:</label>
+                <input
+                  id="endRow"
+                  type="number"
+                  name="endRow"
+                  placeholder={end_node_row}
+                />
+              </div>
+              <div>
+                <label htmlFor="startCol">End col:</label>
+                <input
+                  id="endCol"
+                  type="number"
+                  name="endCol"
+                  placeholder={end_node_col}
+                />
+              </div>
+              <button className="small-button">Change end</button>
+            </form>
+          </div>
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex}>

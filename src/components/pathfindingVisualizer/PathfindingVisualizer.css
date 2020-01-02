@@ -1,3 +1,76 @@
-.grid {
-  margin: 100px 0 0;
+.header {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(147, 14, 255, 0.75);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-bottom: 100px;
+}
+
+.header select {
+  min-width: 200px;
+  text-align: center;
+}
+
+.header button {
+  display: inline-block;
+  min-width: 150px;
+}
+.header select,
+.header button {
+  background-color: rgba(255, 2, 179, 0.75);
+  border: none;
+  border-radius: 50px;
+  padding: 15px;
+  margin-right: 20px;
+}
+
+.header select:active {
+  border: none;
+}
+
+.header button:disabled {
+  text-decoration: grey;
+  background-color: rgba(129, 33, 100, 0.418);
+}
+
+button:hover {
+  background-color: rgb(247, 77, 238);
+  cursor: pointer;
+}
+
+.Form {
+  border: 2px solid rgba(255, 2, 179, 0.75);
+  border-radius: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: 20px;
+}
+.Form label {
+  margin-right: 5px;
+  background-color: rgba(255, 2, 179, 0.75);
+  padding: 4px;
+  border-radius: 5px;
+  display: inline-block;
+  min-width: 80px;
+}
+.Form form {
+  margin-top: 20px;
+  display: flex;
+  direction: column;
+  align-items: center;
+  justify-items: center;
+}
+.Form div {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.Form .small-button {
+  padding: 7px;
+  margin: 0;
+  margin-bottom: 5px;
 }
