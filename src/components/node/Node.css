@@ -1,0 +1,105 @@
+.node {
+  width: 25px;
+  height: 25px;
+  outline: 1px solid black;
+  display: inline-block;
+}
+
+.node-start {
+  background-color: green;
+}
+
+.node-finish {
+  background-color: red;
+}
+
+.node-visited {
+  animation-name: visitedAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(214, 0, 29, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(247, 8, 235, 0.75);
+    border-radius: 75%;
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(226, 27, 53, 0.801);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(147, 14, 255, 0.75);
+  }
+}
+
+.node-shortest-path {
+  animation-name: shortestPath;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+  animation-delay: 0;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes shortestPath {
+  0% {
+    transform: scale(0.4);
+    background-color: rgba(247, 8, 235, 0.75);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: yellow;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: yellow;
+  }
+}
+
+.node-wall {
+  /* ANIMATION IS BREAKING LOGIC. WTF?!?!
+  
+  animation-name: wall;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+  animation-delay: 0;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards; */
+  background-color: rgb(12, 53, 71);
+}
+/*
+@keyframes wall {
+  0% {
+    transform: scale(0.4);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+*/
+.node-weight {
+  background-color: hotpink;
+}
