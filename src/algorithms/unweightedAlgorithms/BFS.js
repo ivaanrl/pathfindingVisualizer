@@ -22,5 +22,8 @@ export default function BFS(grid, startNode, finishNode) {
         }
       });
     }
+    if (priorityQueue.length === 0) {
+      return visitedNodesInOrder;
+    }
   }
 }
