@@ -23,7 +23,12 @@ export default class PathfindingVisualizer extends Component {
       isAnimationRunning: false,
       insertingWalls: true,
       insertingWeights: false,
-      selectedAlgorithm: "dijkstra"
+      buttonDisabled: false,
+      selectedAlgorithm: "dijkstra",
+      selectedStartRow: start_node_row,
+      selectedStartCol: start_node_col,
+      selectedEndRow: end_node_row,
+      selectedEndCol: end_node_col
     };
   }
 
@@ -34,7 +39,11 @@ export default class PathfindingVisualizer extends Component {
 
   buttonText = "Dijkstra";
   visualizeAlgorithm = () => {
-    this.setState({ ...this.state, isAnimationRunning: true });
+    this.setState({
+      ...this.state,
+      isAnimationRunning: true,
+      buttonDisabled: true
+    });
     const { grid } = this.state;
     const startNode = grid[start_node_row][start_node_col];
     const endNode = grid[end_node_row][end_node_col];
@@ -71,20 +80,63 @@ export default class PathfindingVisualizer extends Component {
     switch (value) {
       case "dijsktra":
         this.buttonText = "dijsktra";
+        this.setState({ buttonDisabled: false });
         break;
       case "aStar":
         this.buttonText = "A*";
+        this.setState({ buttonDisabled: false });
         break;
       case "DFS":
         this.buttonText = "DFS";
+        this.setState({ buttonDisabled: true });
         break;
       case "BFS":
         this.buttonText = "BFS";
+        this.setState({ buttonDisabled: true });
         break;
       default:
         this.buttonText = "dijsktra";
+        this.setState({ buttonDisabled: false });
         break;
     }
+  };
+
+  handleInputChange = e => {
+    let { value } = e.target;
+    switch (e.target.name) {
+      case "startRow":
+        this.setState({ selectedStartRow: value });
+        break;
+      case "startCol":
+        this.setState({ selectedStartCol: value });
+        break;
+      case "endRow":
+        this.setState({ selectedEndRow: value });
+        break;
+      case "endCol":
+        this.setState({ selectedEndCol: value });
+        break;
+      default:
+        return;
+    }
+  };
+
+  changeStart = () => {
+    const newGrid = getNewGridWithNewStart(
+      this.state.grid,
+      this.state.selectedStartRow,
+      this.state.selectedStartCol
+    );
+    this.setState({ grid: newGrid });
+  };
+
+  changeEnd = () => {
+    const newGrid = getNewGridWithNewEnd(
+      this.state.grid,
+      this.state.selectedEndRow,
+      this.state.selectedEndCol
+    );
+    this.setState({ grid: newGrid });
   };
 
   handleMouseDown(row, col) {
@@ -143,11 +195,6 @@ export default class PathfindingVisualizer extends Component {
     this.setState({ isMousePressed: false });
   };
 
-  handleDragOver = (row, col) => {
-    if (row === start_node_row && col === start_node_col) {
-    }
-  };
-
   animateAlgorithm = (visitedNodesInOrder, NodesInshortestPathOrder) => {
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length - 1) {
@@ -181,16 +228,12 @@ export default class PathfindingVisualizer extends Component {
           "node-shortest-path"
         );
       }, 40 * i);
-      this.setState({ isAnimationRunning: false });
+      this.setState({ isAnimationRunning: false, buttonDisabled: false });
     }
   }
 
   createref = (row, col) => {
     return (nodeRef[row][col] = React.createRef());
-  };
-
-  changeStart = (row, col) => {
-    console.log(this.refs[`${row}-${col}`].props.isStart);
   };
 
   render() {
@@ -200,85 +243,127 @@ export default class PathfindingVisualizer extends Component {
       <div>
         <div className="grid">
           <div className="header">
-            <select onChange={this.handleChange}>
-              <option value="dijsktra">Dijkstra's algorithm (Weighted)</option>
-              <option value="aStar">A* algorithm (Weighted)</option>
-              <option value="DFS">DFS (Unweighted)</option>
-              <option value="BFS">BFS (Unweighted)</option>
-            </select>
-            <button
-              disabled={this.state.isAnimationRunning}
-              onClick={() => this.visualizeAlgorithm()}
-            >
-              Visualize {this.buttonText}
-            </button>
-            <button
-              disabled={this.state.isAnimationRunning}
-              onClick={() =>
-                this.setState({
-                  insertingWalls: true,
-                  insertingWeights: false,
-                  changingStart: false
-                })
-              }
-            >
-              Insert Walls
-            </button>
-            <button
-              disabled={this.state.isAnimationRunning}
-              onClick={() =>
-                this.setState({
-                  insertingWalls: false,
-                  insertingWeights: true,
-                  changingStart: false
-                })
-              }
-            >
-              Insert weights
-            </button>
+            <div className="left-header">
+              <div className="left-header-top">
+                <select onChange={this.handleChange}>
+                  <option value="dijsktra">
+                    Dijkstra's algorithm (Weighted)
+                  </option>
+                  <option value="aStar">A* algorithm (Weighted)</option>
+                  <option value="DFS">DFS (Unweighted)</option>
+                  <option value="BFS">BFS (Unweighted)</option>
+                </select>
+                <button
+                  disabled={this.state.isAnimationRunning}
+                  onClick={() => this.visualizeAlgorithm()}
+                >
+                  Visualize {this.buttonText}
+                </button>
+                <button
+                  disabled={this.state.isAnimationRunning}
+                  onClick={() =>
+                    this.setState({
+                      insertingWalls: true,
+                      insertingWeights: false,
+                      changingStart: false
+                    })
+                  }
+                >
+                  Insert Walls
+                </button>
+                <button
+                  disabled={this.state.buttonDisabled}
+                  onClick={() =>
+                    this.setState({
+                      insertingWalls: false,
+                      insertingWeights: true,
+                      changingStart: false
+                    })
+                  }
+                >
+                  Insert weights
+                </button>
+              </div>
+              <div className="left-header-bot">
+                <div className="node-description">
+                  <div className="start-node-description">
+                    <div className="start-node-text">Start node:</div>
+                    <div className="node-logo start-node-logo"></div>
+                  </div>
+                  <div className="start-node-description">
+                    <div className="start-node-text">End node:</div>
+                    <div className="node-logo end-node-logo"></div>
+                  </div>
 
-            <form className="Form">
-              <div>
+                  <div className="start-node-description">
+                    <div className="start-node-text">Wall node:</div>
+                    <div className="node-logo wall-node-logo"></div>
+                  </div>
+                  <div className="start-node-description">
+                    <div className="start-node-text">Weight node:</div>
+                    <div className="node-logo weight-node-logo"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="Form">
+              <div className="inputContainer">
                 <label htmlFor="startRow">Start row:</label>
                 <input
                   id="startRow"
                   type="number"
                   name="startRow"
                   placeholder={start_node_row}
+                  onChange={this.handleInputChange}
                 />
               </div>
-              <div>
+              <div className="inputContainer">
                 <label htmlFor="startCol">Start col:</label>
                 <input
                   id="startCol"
                   type="number"
                   name="startCol"
                   placeholder={start_node_col}
+                  onChange={this.handleInputChange}
                 />
               </div>
-              <button className="small-button">Change Start</button>
-            </form>
-            <form className="Form">
-              <div>
+              <button
+                className="small-button"
+                onClick={() => this.changeStart()}
+                disabled={this.state.isAnimationRunning}
+              >
+                Change Start
+              </button>
+            </div>
+            <div className="Form">
+              <div className="inputContainer">
                 <label htmlFor="endRow">End row:</label>
                 <input
                   id="endRow"
                   type="number"
                   name="endRow"
                   placeholder={end_node_row}
+                  onChange={this.handleInputChange}
                 />
               </div>
-              <div>
+              <div className="inputContainer">
                 <label htmlFor="startCol">End col:</label>
                 <input
                   id="endCol"
                   type="number"
                   name="endCol"
                   placeholder={end_node_col}
+                  onChange={this.handleInputChange}
                 />
               </div>
-              <button className="small-button">Change end</button>
-            </form>
+              <button
+                className="small-button"
+                disabled={this.state.isAnimationRunning}
+                onClick={() => this.changeEnd()}
+              >
+                Change end
+              </button>
+            </div>
           </div>
           {grid.map((row, rowIndex) => {
             return (
@@ -299,9 +384,7 @@ export default class PathfindingVisualizer extends Component {
                       onMouseEnter={(row, col) =>
                         this.handleMouseEnter(row, col)
                       }
-                      draggable
                       onMouseUp={() => this.handleMouseUp()}
-                      onDragOver={(row, col) => this.handleDragOver(row, col)}
                     />
                   );
                 })}
@@ -365,21 +448,40 @@ const getNewGridWithWeights = (grid, row, col) => {
   return newGrid;
 };
 
-//const getNewGridWithChangedStartOrEnd = (grid, row, col) => {
-//  const newGrid = grid.slice();
-//  const oldStart = newGrid[start_node_row][start_node_col];
-//  const noLongerStart = {
-//    ...oldStart,
-//    isStart: false
-//  };
-//  newGrid[start_node_row][start_node_col] = noLongerStart;
-//  const node = newGrid[row][col];
-//  const newStart = {
-//    ...node,
-//    isStart: true
-//  };
-//  newGrid[row][col] = newStart;
-//  start_node_row = row;
-//  start_node_col = col;
-//  return newGrid;
-//};
+const getNewGridWithNewStart = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const oldStart = newGrid[start_node_row][start_node_col];
+  const noLongerStart = {
+    ...oldStart,
+    isStart: false
+  };
+  newGrid[start_node_row][start_node_col] = noLongerStart;
+  const node = newGrid[row][col];
+  const newStart = {
+    ...node,
+    isStart: true
+  };
+  newGrid[row][col] = newStart;
+  start_node_row = row;
+  start_node_col = col;
+  return newGrid;
+};
+
+const getNewGridWithNewEnd = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const oldEnd = newGrid[end_node_row][end_node_col];
+  const noLongerEnd = {
+    ...oldEnd,
+    isEnd: false
+  };
+  newGrid[end_node_row][end_node_col] = noLongerEnd;
+  const node = newGrid[row][col];
+  const newEnd = {
+    ...node,
+    isEnd: true
+  };
+  newGrid[row][col] = newEnd;
+  end_node_row = row;
+  end_node_col = col;
+  return newGrid;
+};

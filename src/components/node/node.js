@@ -40,8 +40,7 @@ export default class Node extends Component {
       isStart,
       onMouseDown,
       onMouseEnter,
-      onMouseUp,
-      onDragOver
+      onMouseUp
     } = this.props;
     const extraClassName = isEnd ? "node-finish" : isStart ? "node-start" : "";
 
@@ -52,7 +51,6 @@ export default class Node extends Component {
         onMouseDown={() => onMouseDown(row, col)}
         onMouseUp={() => onMouseUp()}
         onMouseEnter={() => onMouseEnter(row, col)}
-        onDragOver={() => onDragOver(row, col)}
         draggable={isStart || isEnd ? true : null}
       ></div>
     );

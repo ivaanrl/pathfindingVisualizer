@@ -107,5 +107,6 @@
 }
 */
 .node-weight {
-  background-color: hotpink;
+  background-color: rgba(129, 33, 100, 0.418);
+  border-radius: 100%;
 }

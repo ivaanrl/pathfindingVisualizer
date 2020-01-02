@@ -1,5 +1,5 @@
 .header {
-  height: 150px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,20 +57,70 @@ button:hover {
   display: inline-block;
   min-width: 80px;
 }
-.Form form {
+.Form div {
   margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   direction: column;
   align-items: center;
   justify-items: center;
 }
-.Form div {
+.Form .inputContainer {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.Form input {
+  min-width: 200px;
 }
 
 .Form .small-button {
   padding: 7px;
   margin: 0;
   margin-bottom: 5px;
+}
+
+.left-header-bot {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.node-description {
+  display: flex;
+  flex-direction: row;
+}
+
+.start-node-description {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 25px;
+  width: 130px;
+  background-color: rgba(255, 2, 179, 0.75);
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.start-node-logo {
+  background-color: rgba(116, 7, 110, 0.685);
+}
+
+.node-logo {
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+}
+
+.end-node-logo {
+  background-color: slateblue;
+}
+
+.wall-node-logo {
+  background-color: rgb(12, 53, 71);
+}
+
+.weight-node-logo {
+  background-color: rgba(129, 33, 100, 0.418);
 }
