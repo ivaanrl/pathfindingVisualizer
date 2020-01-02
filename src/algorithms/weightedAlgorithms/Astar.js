@@ -1,3 +1,5 @@
+import getUnvisitedNeighbors from "../helpers/getUnvisitedNeighbors";
+
 export default function Astar(grid, startNode, finishNode) {
   const visitedNodesInOrder = [];
   const openList = [startNode];
@@ -16,16 +18,16 @@ export default function Astar(grid, startNode, finishNode) {
     let currentNode = openList.pop();
     visitedNodesInOrder.push(currentNode);
     currentNode.isVisited = true;
-    console.log(grid[currentNode.row + 1][currentNode.col]);
-    console.log(grid[currentNode.row][currentNode.col - 1]);
-    console.log(grid[currentNode.row][currentNode.col + 1]);
-    console.log(grid[currentNode.row - 1][currentNode.col]);
-    let currentNeighbors = [
-      grid[currentNode.row + 1][currentNode.col],
-      grid[currentNode.row][currentNode.col - 1],
-      grid[currentNode.row][currentNode.col + 1],
-      grid[currentNode.row - 1][currentNode.col]
-    ];
+    //console.log(grid[currentNode.row + 1][currentNode.col]);
+    //console.log(grid[currentNode.row][currentNode.col - 1]);
+    //console.log(grid[currentNode.row][currentNode.col + 1]);
+    //console.log(grid[currentNode.row - 1][currentNode.col]);
+    let currentNeighbors = getUnvisitedNeighbors(currentNode, grid);
+    //  grid[currentNode.row + 1][currentNode.col],
+    //  grid[currentNode.row][currentNode.col - 1],
+    //  grid[currentNode.row][currentNode.col + 1],
+    //  grid[currentNode.row - 1][currentNode.col]
+    //];
     let q = findLowerF(currentNode, currentNeighbors);
     if (q.h === 0) {
       return visitedNodesInOrder;
