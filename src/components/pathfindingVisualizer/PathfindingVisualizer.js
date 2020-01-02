@@ -76,6 +76,7 @@ export default class PathfindingVisualizer extends Component {
 
   handleChange = e => {
     let { value } = e.target;
+    this.resetBoard();
     this.setState({ selectedAlgorithm: value });
     switch (value) {
       case "dijsktra":
