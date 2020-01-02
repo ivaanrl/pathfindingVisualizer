@@ -6,6 +6,7 @@ import { dijkstra } from "../../algorithms/weightedAlgorithms/dijkstra";
 import getNodesInShortestPathOrder from "../../algorithms/helpers/getNodesInShortestPathOrder";
 import Astar from "../../algorithms/weightedAlgorithms/Astar";
 import BFS from "../../algorithms/unweightedAlgorithms/BFS";
+import DFS from "../../algorithms/unweightedAlgorithms/DFS";
 
 let start_node_row = 10;
 let start_node_col = 15;
@@ -165,6 +166,16 @@ export default class PathfindingVisualizer extends Component {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
+  visualizeDFS = () => {
+    this.setState({ ...this.state, isAnimationRunning: true });
+    const { grid } = this.state;
+    const startNode = grid[start_node_row][start_node_col];
+    const endNode = grid[end_node_row][end_node_col];
+    const visitedNodesInOrder = DFS(grid, startNode, endNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
+    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
+
   render() {
     const { grid, isMousePressed } = this.state;
 
@@ -198,6 +209,7 @@ export default class PathfindingVisualizer extends Component {
           </button>
           <button onClick={() => this.visualizeAStar()}>Visualize Astar</button>
           <button onClick={() => this.visualizeBFS()}>Visualize BFS</button>
+          <button onClick={() => this.visualizeDFS()}>Visualize DFS</button>
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex}>

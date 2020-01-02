@@ -3,6 +3,9 @@
   height: 25px;
   outline: 1px solid black;
   display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-right: 5px;
 }
 
 .node-start {
@@ -14,8 +17,9 @@
 }
 
 .node-visited {
+  will-change: transform, background-color, border-radius;
   animation-name: visitedAnimation;
-  animation-duration: 1s;
+  animation-duration: 2s;
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
@@ -48,7 +52,7 @@
 
 .node-shortest-path {
   animation-name: shortestPath;
-  animation-duration: 1s;
+  animation-duration: 2s;
   animation-timing-function: ease-out;
   animation-direction: alternate;
   animation-delay: 0;

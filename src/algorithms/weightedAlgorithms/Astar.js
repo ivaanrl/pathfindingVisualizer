@@ -10,18 +10,13 @@ export default function Astar(grid, startNode, finishNode) {
     row.map(node => {
       node.h = manhattanDistance(node, finishNode);
       distanceF.push([node.h]);
-      node.isVisited = false;
     });
   });
 
   while (openList.length !== 0) {
-    let currentNode = openList.pop();
+    let currentNode = openList.shift();
     visitedNodesInOrder.push(currentNode);
     currentNode.isVisited = true;
-    //console.log(grid[currentNode.row + 1][currentNode.col]);
-    //console.log(grid[currentNode.row][currentNode.col - 1]);
-    //console.log(grid[currentNode.row][currentNode.col + 1]);
-    //console.log(grid[currentNode.row - 1][currentNode.col]);
     let currentNeighbors = getUnvisitedNeighbors(currentNode, grid);
 
     let q = findLowerF(currentNode, currentNeighbors);
