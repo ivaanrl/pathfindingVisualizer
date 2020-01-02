@@ -44,6 +44,7 @@ export default class PathfindingVisualizer extends Component {
       isAnimationRunning: true,
       buttonDisabled: true
     });
+    this.resetBoard();
     const { grid } = this.state;
     const startNode = grid[start_node_row][start_node_col];
     const endNode = grid[end_node_row][end_node_col];
