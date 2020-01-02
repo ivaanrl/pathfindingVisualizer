@@ -7,14 +7,6 @@ export default function DFS(
   visitedNodesInOrder = [],
   stack = [startNode]
 ) {
-  //unvisitedNeighbors.forEach(node => {
-  //  if (node === finishNode) {
-  //    visitedNodesInOrder.push(finishNode);
-  //    return visitedNodesInOrder;
-  //  } else if (!node.isVisited) {
-  //    DFS(grid, startNode, finishNode, visitedNodesInOrder);
-  //  }
-  //});
   while (stack.length !== 0) {
     let currentNode = stack.pop();
     currentNode.isVisited = true;
@@ -29,5 +21,8 @@ export default function DFS(
         stack.push(node);
       }
     });
+    if (stack.length === 0) {
+      return visitedNodesInOrder;
+    }
   }
 }
