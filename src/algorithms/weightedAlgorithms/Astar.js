@@ -20,7 +20,9 @@ export default function Astar(grid, startNode, finishNode) {
     let currentNeighbors = getUnvisitedNeighbors(currentNode, grid);
 
     let q = findLowerF(currentNode, currentNeighbors);
-    if (q.h === 0) {
+    if (q === null) {
+      return visitedNodesInOrder;
+    } else if (q.h === 0) {
       return visitedNodesInOrder;
     } else {
       openList.push(q);

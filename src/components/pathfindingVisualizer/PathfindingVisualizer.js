@@ -190,6 +190,18 @@ export default class PathfindingVisualizer extends Component {
     ref.setWall();
   };
 
+  resetStyle = ref => {
+    ref.resetStyle();
+  };
+
+  resetBoard = () => {
+    const newGrid = getInitialGrid();
+    this.setState({ ...this.state, grid: newGrid });
+    for (let nodeRef in this.refs) {
+      this.resetStyle(this.refs[`${nodeRef}`]);
+    }
+  };
+
   handleMouseUp = () => {
     if (this.state.isAnimationRunning) return;
     this.setState({ isMousePressed: false });
@@ -303,6 +315,13 @@ export default class PathfindingVisualizer extends Component {
                     <div className="start-node-text">Weight node:</div>
                     <div className="node-logo weight-node-logo"></div>
                   </div>
+                  <button
+                    className="small-button"
+                    onClick={() => this.resetBoard()}
+                    disabled={this.state.isAnimationRunning}
+                  >
+                    Reset Board
+                  </button>
                 </div>
               </div>
             </div>

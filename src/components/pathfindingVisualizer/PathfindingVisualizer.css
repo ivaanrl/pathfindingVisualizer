@@ -80,6 +80,12 @@ button:hover {
   margin-bottom: 5px;
 }
 
+.node-description button {
+  padding: 7px;
+  margin: 0;
+  margin-right: 20px;
+}
+
 .left-header-bot {
   display: flex;
   justify-content: center;

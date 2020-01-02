@@ -18,6 +18,10 @@ export default class Node extends Component {
     }
   };
 
+  resetStyle = () => {
+    this.setState({ nodeVisited: "", isWeight: false, isWall: false });
+  };
+
   setShortestPath = string => {
     this.setState({ nodeVisited: string });
   };
